@@ -156,7 +156,7 @@ class File2 : Iterable<File2>
 
     operator fun plus(value: String): File2
     {
-        return File2(path + File.separator + value)
+        return File2(path + (if (value.isNotEmpty()) File.separator else "" ) + value)
     }
 
     operator fun invoke(value: String): File2
