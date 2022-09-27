@@ -39,12 +39,12 @@ object RuleEditorServer
 
         val config = if (asJson.exists) asJson.name else (if (asYaml.exists) asYaml.name else asBs.name)
 
-        val server = Server("127.0.0.1", httpPort, webDir, assetsDir)
+        val server = Server("0.0.0.0", httpPort, webDir, assetsDir)
         server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false)
 
         val arguments = JSONObject()
         arguments.put("api", "http://127.0.0.1:$httpPort/_")
-        arguments.put("config", "$config")
+        arguments.put("config", config)
         arguments.put("res", "res")
 
         val iface = "http://127.0.0.1:$httpPort/index.html?arguments=" + Base64.getEncoder().encodeToString(arguments.toString().toByteArray())
@@ -52,7 +52,7 @@ object RuleEditorServer
         println(iface)
         println(iface2)
 
-        if (System.getProperty("os.name").lowercase().startsWith("windows"))
+        if (!isDev && System.getProperty("os.name").lowercase().startsWith("windows"))
             Runtime.getRuntime().exec("cmd /C start $iface")
     }
 }
