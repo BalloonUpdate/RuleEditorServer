@@ -1,0 +1,33 @@
+{
+  "name": "rule-editor",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 8080 --cors",
+    "dev2": "vue-tsc --noEmit --watch",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "clean": "yarn cache clean"
+  },
+  "dependencies": {
+    "@sanjo/escape-for-reg-exp": "^1.0.0",
+    "@stdlib/string-replace": "^0.0.11",
+    "js-yaml": "^4.1.0",
+    "moment": "^2.29.1",
+    "pretty-bytes": "^6.0.0",
+    "vue": "^3.2.30",
+    "webdav": "^4.8.0"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.19.0",
+    "@types/dompurify": "^2.3.3",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.7.18",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "stylus": "^0.59.0",
+    "typescript": "^4.5.5",
+    "vite": "^3.1.3",
+    "vue-tsc": "^0.40.13"
+  }
+}

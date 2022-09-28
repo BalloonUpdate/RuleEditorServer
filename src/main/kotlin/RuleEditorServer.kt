@@ -10,7 +10,7 @@ object RuleEditorServer
     {
         val isDev = (javaClass.getResource("")?.protocol ?: false) == "file"
         val workDir = File2(System.getProperty("user.dir"))
-        val assetsDir = workDir + (if (isDev) "build/production/assets" else (if (args.isNotEmpty()) args[0] else ""))
+        val assetsDir = workDir + (if (isDev) "web" else (if (args.isNotEmpty()) args[0] else ""))
         val httpPort = if (args.size > 1) args[1].toInt() else 6700
         val webDir = if (isDev) workDir + "web" else null
 

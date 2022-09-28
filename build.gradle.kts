@@ -54,6 +54,13 @@ tasks.jar {
         if (it.isDirectory) it else zipTree(it)//.matching { exclude("*") }
     })
 
+    doFirst {
+        exec {
+            commandLine("build-frontend.cmd")
+//            isIgnoreExitValue = true
+        }
+    }
+
     // 打包web目录
     from("web") { into("web") }
 
