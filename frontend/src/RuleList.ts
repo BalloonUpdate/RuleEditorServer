@@ -30,14 +30,16 @@ export default class RuleList
         this.rulesOnce = []
     }
 
-    loadRules(text: string, isJsonFormat: boolean, isBalloonServerStandard: boolean)
+    loadRules(text: string, isJsonFormat: boolean)
     {
         this.isJsonFormat = isJsonFormat
         this.configObject = isJsonFormat ? JSON.parse(text) : yaml.load(text)
-        this.isBalloonServerStandard = isBalloonServerStandard
+        this.isBalloonServerStandard = 'commonMode' in this.configObject
 
-        let common = !isBalloonServerStandard ? this.configObject.common_mode : this.configObject.commonMode
-        let once = !isBalloonServerStandard ? this.configObject.once_mode : this.configObject.onceMode
+        console.log(this.isBalloonServerStandard);
+
+        let common = !this.isBalloonServerStandard ? this.configObject.common_mode : this.configObject.commonMode
+        let once = !this.isBalloonServerStandard ? this.configObject.once_mode : this.configObject.onceMode
 
         for (const rule of common)
             this.rulesCommon.push(this.fromRule(rule))

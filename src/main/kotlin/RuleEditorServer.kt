@@ -9,46 +9,59 @@ object RuleEditorServer
     fun main(args: Array<String>)
     {
         val isDev = (javaClass.getResource("")?.protocol ?: false) == "file"
+
+        if (!isDev)
+        {
+            if (args.size < 3)
+            {
+                println("缺少参数： 0.服务端目录路径, 1.更新规则文件相对路径(相对与服务端目录), 2.端口")
+                exitProcess(1)
+            }
+        } else {
+            if (args.size < 2)
+            {
+                println("缺少参数： 0.服务端目录路径, 1.更新规则文件相对路径(相对与服务端目录)")
+                exitProcess(1)
+            }
+        }
+
         val workDir = File2(System.getProperty("user.dir"))
-        val assetsDir = workDir + (if (isDev) "web" else (if (args.isNotEmpty()) args[0] else ""))
-        val httpPort = if (args.size > 1) args[1].toInt() else 6700
+        val serverDir = File2(args[0])
+        val ruleFile = serverDir + args[1]
+        val httpPort = if (isDev) 6700 else args[2].toInt()
         val webDir = if (isDev) workDir + "web" else null
 
-        if (!assetsDir.exists)
+        if (!serverDir.exists)
         {
-            println("服务端目录找不到: ${assetsDir.path}")
+            println("服务端目录找不到: ${serverDir.path}")
             exitProcess(1)
         }
 
-        val res = assetsDir + "res"
+        val res = serverDir + "res"
         if (!res.exists)
         {
             println("服务端目录下找不到res目录: ${res.path}")
             exitProcess(1)
         }
 
-        val asJson = assetsDir + "index.json"
-        val asYaml = assetsDir + "config.yml"
-        val asBs = assetsDir + "littleserver.json"
-
-        if (!asJson.exists && !asYaml.exists && !asBs.exists)
+        if (!ruleFile.exists)
         {
-            println("服务端目录下找不到index.json或者config.yml或者littleserver.json")
+            println("服务端目录下找不到更新规则文件: ${ruleFile.path}")
             exitProcess(1)
         }
 
-        val config = if (asJson.exists) asJson.name else (if (asYaml.exists) asYaml.name else asBs.name)
+        val ruleFilename = ruleFile.name
 
-        val server = Server("0.0.0.0", httpPort, webDir, assetsDir)
+        val server = Server("0.0.0.0", httpPort, webDir, serverDir)
         server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false)
 
         val arguments = JSONObject()
         arguments.put("api", "http://127.0.0.1:$httpPort/_")
-        arguments.put("config", config)
+        arguments.put("config", ruleFilename)
         arguments.put("res", "res")
 
         val iface = "http://127.0.0.1:$httpPort/index.html?arguments=" + Base64.getEncoder().encodeToString(arguments.toString().toByteArray())
-        val iface2 = "http://127.0.0.1:$httpPort/index.html?api=http://127.0.0.1:$httpPort/_&config=$config&res=res"
+        val iface2 = "http://127.0.0.1:$httpPort/index.html?api=http://127.0.0.1:$httpPort/_&config=$ruleFilename&res=res"
         println(iface)
         println(iface2)
 

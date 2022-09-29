@@ -96,7 +96,6 @@ export default class App extends AbstractComponentData
     private async loadRulesAndFirstFolder(): Promise<void>
     {
         let isJson = this.configPath.endsWith('json')
-        let isBalloonServerStandard = this.configPath.endsWith('littleserver.json')
         let content!: string
         try {
             content = await this.storage!.read(this.configPath)
@@ -107,7 +106,7 @@ export default class App extends AbstractComponentData
         
         console.log(content)
 
-        this.ruleList.loadRules(content, isJson, isBalloonServerStandard)
+        this.ruleList.loadRules(content, isJson)
         
         let firstFolder!: Array<(FileInfo | DirInfo)>
         try {
